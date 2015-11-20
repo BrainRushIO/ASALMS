@@ -1,0 +1,28 @@
+{
+  "name": "ASALMS",
+  "version": "1.0.0",
+  "description": "Backend for ASA",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/brainrushio/ASALMS.git"
+  },
+  "keywords": [
+    "node",
+    "asa",
+    "backend"
+  ],
+  "author": "Pablo Leon-Luna",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/brainrushio/ASALMS/issues"
+  },
+  "homepage": "https://github.com/brainrushio/ASALMS",
+  "dependencies": {
+    "express": "^4.13.3",
+    "mongodb": "^2.0.48"
+  }
+}
