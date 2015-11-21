@@ -4,7 +4,7 @@
 var express = require( 'express');
 var app = express();
 
-app.get( '/hello', function( req,res ) 
+app.get( '/', function( req,res ) 
 {
 	console.log("Hello Jon!");
 	var obj = { Hello: "World "};
