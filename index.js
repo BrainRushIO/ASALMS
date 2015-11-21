@@ -6,7 +6,7 @@ var app = express();
 
 app.get( '/hello', function( req,res ) 
 {
-	console.log("Hello World!");
+	console.log("Hello Jon!");
 	var obj = { Hello: "World "};
 
 	res.send( obj );
