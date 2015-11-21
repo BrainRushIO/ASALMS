@@ -10,7 +10,7 @@ app.get( '/', function( req,res )
 	res.send("Hello World!");
 });
 
-var server = app.listen(80, function(){
+var server = app.listen(80, function(res, req){
 
 	var host = server.address().address;
 	var port = server.address().port;
@@ -18,3 +18,4 @@ var server = app.listen(80, function(){
 	console.log('app listenin at http://%s:$s', host, port);
 
 });
+	
