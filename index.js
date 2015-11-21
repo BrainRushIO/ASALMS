@@ -4,12 +4,17 @@
 var express = require( 'express');
 var app = express();
 
-app.get( '/hello', function( req,res ) 
+app.get( '/', function( req,res ) 
 {
-	console.log("Hello World!");
-	var obj = { Hello: "World "};
 
-	res.send( obj );
+	res.send("Hello World!");
 });
 
+var server = app.listen(80, function(){
 
+	var host = server.address().address;
+	var port = server.address().port;
+
+	console.log('app listenin at http://%s:$s', host, port);
+
+});
