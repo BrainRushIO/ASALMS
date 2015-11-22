@@ -4,12 +4,9 @@
 var express = require( 'express');
 var app = express();
 
-app.get( '/hello', function( req,res ) 
+app.get( '/', function( req,res ) 
 {
-	console.log("Hello World!");
-	var obj = { Hello: "World "};
-
-	res.send( obj );
+	res.send("Welcome to ASA Ghost Match Landing Page");
 });
 
 //app.listen( process.env.PORT || 3000 );	
