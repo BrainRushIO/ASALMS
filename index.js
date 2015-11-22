@@ -7,6 +7,7 @@ var app = express();
 app.get( '/', function( req,res ) 
 {
 	res.send("Welcome to ASA Ghost Match Landing Page");
+    console.log("landed on home page");
 });
 
 //app.listen( process.env.PORT || 3000 );	
@@ -33,6 +34,8 @@ MongoClient.connect( dbURL, ( err, inDB ) =>
 // NEW PLAYER
 app.post( '/players', ( req, res ) =>
 {
+    console.log("players post");
+
 	var players = db.collection( 'players');
 
 	var newPlayer = 
