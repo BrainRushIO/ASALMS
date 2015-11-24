@@ -2,7 +2,11 @@
 
 // EXPRESS INIT / HELLO WORLD
 var express = require( 'express');
+var bodyparser = require('body-parser');
 var app = express();
+
+app.use(bodyParser.json()); // support json encoded bodies
+app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 
 app.get( '/', function( req,res ) 
 {
@@ -32,21 +36,14 @@ MongoClient.connect( dbURL, ( err, inDB ) =>
 } );
 
 // NEW PLAYER
-app.post( '/players', ( req, res ) =>
+app.post( '/data', ( req, res ) =>
 {
-    console.log("players post");
+    var newDataPack = req.body;
+    console.log("added a DATAPACK via post");
 
-	var players = db.collection( 'players');
+	var datapacks = db.collection( 'datapacks');
 
-	var newPlayer = 
-	{
-		Name : "player" + Math.ceil( Math.random() * 10000 ),
-		Health: 100,
-		Coins: 80,
-		Kills: 0
-	};
-
-	players.insertOne( newPlayer, ( err, result ) =>
+	datapacks.insertOne( newDataPack, ( err, result ) =>
 	{
 		if( err )
 		{
@@ -56,7 +53,7 @@ app.post( '/players', ( req, res ) =>
 		else
 		{
 			//console.log( JSON.stringify( result.ops, null, '  ' ) );
-			console.log( "new player with id: " +  result.insertedId );
+			console.log( "new dataPack with id: " +  result.insertedId );
 			var playerWithId = result.ops[0];
 			return res.send( playerWithId );
 		}
