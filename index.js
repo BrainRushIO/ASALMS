@@ -11,7 +11,7 @@ var LocalStrategy = require('passport-local').Strategy;
 
 //passport rip off
 //app.use(cookieParser('your secret here'));
-app.use(express.session());
+//app.use(express.session());
 app.use(passport.initialize());
 app.use(passport.session());
 
