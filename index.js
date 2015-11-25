@@ -8,6 +8,11 @@ var Account = require('./models/account');
 var mongoose = require('mongoose');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
+var cookieParser = require('cookie-parser');
+var session = require('cookie-session');
+var logger = require('morgan');
+var router = require('express').Router();
+
 
 //passport rip off
 //app.use(cookieParser('your secret here'));
@@ -15,8 +20,11 @@ var LocalStrategy = require('passport-local').Strategy;
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use(bodyparser.json()); // support json encoded bodies
-app.use(bodyparser.urlencoded({ extended: true })); // support encoded bodies
+app.use(logger('dev'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(cookieParser());
+app.use(session({keys: ['secretkey1', 'secretkey2', '...']}));
 
 // passport config
 var Account = require('./models/account');
@@ -105,12 +113,13 @@ app.get( '/data/:playerId', ( req, res ) =>
 });
 
 //passport register
-app.post('/register', function(req, res) {
+router.post('/register', function(req, res) {
     Account.register(new Account({ email : req.body.email }), req.body.password, function(err, account) {
         if (err) {
             return res.render('register', { account : account });
         }
-
+        
+        console.log("SUCCESS! Registered an account");
         passport.authenticate('local')(req, res, function () {
           res.redirect('/');
         });
