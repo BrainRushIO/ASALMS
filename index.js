@@ -4,9 +4,25 @@
 var express = require( 'express');
 var bodyparser = require('body-parser');
 var app = express();
+var Account = require('./models/account');
+var mongoose = require('mongoose');
+var passport = require('passport');
+var LocalStrategy = require('passport-local').Strategy;
+
+//passport rip off
+app.use(express.cookieParser('your secret here'));
+app.use(express.session());
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use(bodyparser.json()); // support json encoded bodies
 app.use(bodyparser.urlencoded({ extended: true })); // support encoded bodies
+
+// passport config
+var Account = require('./models/account');
+passport.use(new LocalStrategy(Account.authenticate()));
+passport.serializeUser(Account.serializeUser());
+passport.deserializeUser(Account.deserializeUser());
 
 app.get( '/', function( req,res ) 
 {
@@ -23,6 +39,8 @@ var ObjectID = mongodb.ObjectID;
 //mongo db below
 var db;
 var dbURL = process.env.DBURL || 'mongodb://localhost:27017/test';
+mongoose.connect(process.env.DBURL || 'mongodb://localhost:27017/test');
+
 MongoClient.connect( dbURL, ( err, inDB ) =>
 {
 	if ( err )
@@ -86,4 +104,16 @@ app.get( '/data/:playerId', ( req, res ) =>
 	} );
 });
 
+//passport register
+app.post('/register', function(req, res) {
+    Account.register(new Account({ email : req.body.email }), req.body.password, function(err, account) {
+        if (err) {
+            return res.render('register', { account : account });
+        }
+
+        passport.authenticate('local')(req, res, function () {
+          res.redirect('/');
+        });
+    });
+});
 
