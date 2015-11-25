@@ -62,7 +62,7 @@ app.post( '/data', ( req, res ) =>
 
 function dbGetPlayerData( playerId, callback )
 {
-	var players = db.collection( 'datapacks');
+	var players = db.collection( 'players');
 	console.log( playerId );
 	players.findOne( { _id: ObjectID.createFromHexString( playerId ) }, callback );
 }
@@ -74,7 +74,7 @@ function dbSetPlayerData( playerId, playerData, callback )
 }
 
 // LOAD PLAYER DATA
-app.get( '/data/:playerId', ( req, res ) => 
+app.get( '/players/:playerId', ( req, res ) => 
 {
 	dbGetPlayerData( req.params.playerId, ( err, playerData ) =>
 	{
