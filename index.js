@@ -4,33 +4,9 @@
 var express = require( 'express');
 var bodyparser = require('body-parser');
 var app = express();
-var Account = require('./models/account');
-var mongoose = require('mongoose');
-var passport = require('passport');
-var LocalStrategy = require('passport-local').Strategy;
-var cookieParser = require('cookieparser');
-var session = require('cookie-session');
-var logger = require('morgan');
-var router = require('express').Router();
 
-
-//passport rip off
-//app.use(cookieParser('your secret here'));
-//app.use(express.session());
-app.use(passport.initialize());
-app.use(passport.session());
-
-app.use(logger('dev'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: false}));
-app.use(cookieParser());
-app.use(session({keys: ['secretkey1', 'secretkey2', '...']}));
-
-// passport config
-var Account = require('./models/account');
-passport.use(new LocalStrategy(Account.authenticate()));
-passport.serializeUser(Account.serializeUser());
-passport.deserializeUser(Account.deserializeUser());
+app.use(bodyparser.json()); // support json encoded bodies
+app.use(bodyparser.urlencoded({ extended: true })); // support encoded bodies
 
 app.get( '/', function( req,res ) 
 {
@@ -47,8 +23,6 @@ var ObjectID = mongodb.ObjectID;
 //mongo db below
 var db;
 var dbURL = process.env.DBURL || 'mongodb://localhost:27017/test';
-mongoose.connect(process.env.DBURL || 'mongodb://localhost:27017/test');
-
 MongoClient.connect( dbURL, ( err, inDB ) =>
 {
 	if ( err )
@@ -112,17 +86,45 @@ app.get( '/data/:playerId', ( req, res ) =>
 	} );
 });
 
-//passport register
-router.post('/register', function(req, res) {
-    Account.register(new Account({ email : req.body.email }), req.body.password, function(err, account) {
-        if (err) {
-            return res.render('register', { account : account });
-        }
-        
-        console.log("SUCCESS! Registered an account");
-        passport.authenticate('local')(req, res, function () {
-          res.redirect('/');
-        });
-    });
+// BUY POTION
+app.post( '/players/:playerId/buyPotion', ( req, res ) => 
+{
+	dbGetPlayerData( req.params.playerId, ( err, playerData ) =>
+	{
+		if ( playerData )
+		{
+			if ( playerData.Coins >= 50 && playerData.Health > 0 )
+			{
+				playerData.Coins -= 50;
+				playerData.Health = 100;
+			}
+
+			dbSetPlayerData( req.params.playerId, playerData, ( err  ) =>
+			{
+				return res.send( playerData );
+			} );
+		}
+	} );
 });
 
+// FIGHT
+app.post( '/players/:playerId/fight', ( req, res ) => 
+{
+	dbGetPlayerData( req.params.playerId, ( err, playerData ) =>
+	{
+		if ( playerData )
+		{
+			if ( playerData.Health > 0 )
+			{
+				playerData.Kills++;
+				playerData.Coins += Math.ceil( Math.random() * 5 );
+				playerData.Health -= Math.ceil( Math.random() * 11 );
+			}
+
+			dbSetPlayerData( req.params.playerId, playerData, ( err  ) =>
+			{
+				return res.send( playerData );
+			} );
+		}
+	} );
+});
