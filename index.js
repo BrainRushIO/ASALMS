@@ -10,7 +10,7 @@ var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 
 //passport rip off
-app.use(express.cookieParser('your secret here'));
+//app.use(cookieParser('your secret here'));
 app.use(express.session());
 app.use(passport.initialize());
 app.use(passport.session());
