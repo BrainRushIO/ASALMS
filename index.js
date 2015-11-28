@@ -1,21 +1,3 @@
-//Skip to content
-//This repository  
-//Search
-//Pull requests
-//Issues
-//Gist
-// @paleonluna
-// Switch to new design
-//Introducing a new repository design
-//Hey there! We're rolling out a faster, more streamlined repository experience and would love to give you early access.
-// Watch 9
-//  Star 311
-// Fork 100 saintedlama/passport-local-mongoose
-// Branch: master  passport-local-mongoose/examples/login/app.js
-//65b37f4  on Sep 14
-//@saintedlama saintedlama Reformat code
-//1 contributor
-//RawBlameHistory     83 lines (66 sloc)  2.2 KB
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
@@ -99,47 +81,6 @@ app.use(function(err, req, res, next) {
 
 
 module.exports = app;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
