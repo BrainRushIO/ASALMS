@@ -1,40 +1,43 @@
 var passport = require('passport');
 var Account = require('./models/account');
-var router = require('express').Router();
 
-router.get('/', function(req, res) {
-  res.render('index', {user: req.user});
-});
-
-router.get('/register', function(req, res) {
-  res.render('register', {});
-});
-
-router.post('/register', function(req, res, next) {
-  console.log('registering user');
-  Account.register(new Account({username: req.body.username}), req.body.password, function(err) {
-    if (err) {
-      console.log('error while user register!', err);
-      return next(err);
-    }
-
-    console.log('user registered!');
-
-    res.redirect('/');
+module.exports = function (app) {
+    
+  app.get('/', function (req, res) {
+      res.render('index', { user : req.user });
   });
-});
 
-router.get('/login', function(req, res) {
-  res.render('login', {user: req.user});
-});
+  app.get('/register', function(req, res) {
+      res.render('register', { });
+  });
 
-router.post('/login', passport.authenticate('local'), function(req, res) {
-  res.redirect('/');
-});
+  app.post('/register', function(req, res) {
+      Account.register(new Account({ username : req.body.username }), req.body.password, function(err, account) {
+          if (err) {
+            return res.render("register", {info: "Sorry. That username already exists. Try again."});
+          }
 
-router.get('/logout', function(req, res) {
-  req.logout();
-  res.redirect('/');
-});
+          passport.authenticate('local')(req, res, function () {
+            res.redirect('/');
+          });
+      });
+  });
 
-module.exports = router;
+  app.get('/login', function(req, res) {
+      res.render('login', { user : req.user });
+  });
+
+  app.post('/login', passport.authenticate('local'), function(req, res) {
+      res.redirect('/');
+  });
+
+  app.get('/logout', function(req, res) {
+      req.logout();
+      res.redirect('/');
+  });
+
+  app.get('/ping', function(req, res){
+      res.send("pong!", 200);
+  });
+  
+};
